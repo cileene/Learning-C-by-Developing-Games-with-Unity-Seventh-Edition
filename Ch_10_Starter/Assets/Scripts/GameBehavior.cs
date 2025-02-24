@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameBehavior : MonoBehaviour
+public class GameBehavior : MonoBehaviour, IManager
 {
     public int MaxItems = 4;
 
@@ -15,11 +15,26 @@ public class GameBehavior : MonoBehaviour
 
     public Button WinButton;
     public Button LossButton;
+    
+    private string _state;
+    
+    public string State
+    {
+        get { return _state; }
+        set { _state = value; }
+    }
 
     void Start()
     {
         ItemText.text += _itemsCollected;
         HealthText.text += _playerHP;
+        Initialize();
+    }
+    
+    public void Initialize()
+    {
+        _state = "Let's get GameManaging!";
+        Debug.Log(_state);
     }
 
     private int _itemsCollected = 0;
@@ -63,7 +78,7 @@ public class GameBehavior : MonoBehaviour
                 ProgressText.text = "Ouch... that's got hurt.";
             }
 
-            Debug.LogFormat("Lives: {0}", _playerHP);
+            //Debug.LogFormat("Lives: {0}", _playerHP);
         }
     }
 
