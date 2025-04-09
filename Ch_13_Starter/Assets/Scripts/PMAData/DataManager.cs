@@ -56,6 +56,7 @@ namespace PMAData
             return groupMember;
         }
 
+        // this xml aint exactly human readable.
         public static string SerializeToXML(GroupMember groupMember)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(GroupMember));
