@@ -58,7 +58,6 @@ namespace PMAData
 
         public static string SerializeToXML(GroupMember groupMember)
         {
-            // serialize the object to XML
             XmlSerializer serializer = new XmlSerializer(typeof(GroupMember));
             StringWriter stringWriter = new StringWriter();
             
@@ -74,7 +73,6 @@ namespace PMAData
         
         public static GroupMember DeserializeFromXML(string xmlString)
         {
-            // deserialize the XML string back to an object
             XmlSerializer serializer = new XmlSerializer(typeof(GroupMember));
             StringReader stringReader = new StringReader(xmlString);
             GroupMember groupMember = (GroupMember)serializer.Deserialize(stringReader);
