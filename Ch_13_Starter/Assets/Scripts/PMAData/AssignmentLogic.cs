@@ -30,7 +30,7 @@ namespace PMAData
             string memberName = groupMember.firstName;
             DataManager.SaveXmlToFile(memberName, groupMember);
 
-            groupMember = DataManager.LoadFromFile($"{memberName}.xml");
+            groupMember = DataManager.LoadFromFile<GroupMember>($"{memberName}.xml");
             if (groupMember == null)
             {
                 Debug.LogError($"Failed to load group member: {memberName}");

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace PMAData
 {
+    // this class was refactored to be more generic and reusable
     public static class DataManager
     {
         public static string DataPath;
@@ -25,46 +26,46 @@ namespace PMAData
             Debug.Log($"New directory created at {DataPath}");
         }
         
-        public static void SaveXmlToFile(string fileName, GroupMember groupMember)
+        public static void SaveXmlToFile<T>(string fileName, T obj)
         {
             string filePath = Path.Combine(DataPath, $"{fileName}.xml");
-            string xml = SerializeToXML(groupMember);
+            string xml = SerializeToXML(obj);
             File.WriteAllText(filePath, xml);
             Debug.Log($"Saved data to {filePath}");
         }
         
-        public static void SaveJsonToFile(string fileName, GroupMember groupMember)
+        public static void SaveJsonToFile<T>(string fileName, T obj)
         {
-            string json = DataManager.SerializeToJson(groupMember);
+            string json = SerializeToJson(obj);
             string jsonFilePath = Path.Combine(DataManager.DataPath, $"{fileName}.json");
             File.WriteAllText(jsonFilePath, json);
             Debug.Log("Saved JSON to " + jsonFilePath);
         }
         
-        public static GroupMember LoadFromFile(string fileName)
+        public static T LoadFromFile<T>(string fileName)
         {
             string filePath = Path.Combine(DataPath, fileName);
             if (!File.Exists(filePath))
             {
                 Debug.LogError($"File not found: {filePath}");
-                return null;
+                return default;
             }
 
             string xml = File.ReadAllText(filePath);
-            GroupMember groupMember = DeserializeFromXML(xml);
+            T obj = DeserializeFromXML<T>(xml);
             Debug.Log($"Loaded data from {filePath}");
-            return groupMember;
+            return obj;
         }
 
         // this xml aint exactly human readable.
-        public static string SerializeToXML(GroupMember groupMember)
+        public static string SerializeToXML<T>(T obj)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(GroupMember));
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
             StringWriter stringWriter = new StringWriter();
             
             using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter))
             {
-                serializer.Serialize(xmlWriter, groupMember);
+                serializer.Serialize(xmlWriter, obj);
             }
             
             string xmlString = stringWriter.ToString();
@@ -72,18 +73,18 @@ namespace PMAData
             return xmlString;
         }
         
-        public static GroupMember DeserializeFromXML(string xmlString)
+        public static T DeserializeFromXML<T>(string xmlString)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(GroupMember));
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
             StringReader stringReader = new StringReader(xmlString);
-            GroupMember groupMember = (GroupMember)serializer.Deserialize(stringReader);
+            T obj = (T)serializer.Deserialize(stringReader);
             stringReader.Close();
-            return groupMember;
+            return obj;
         }
         
-        public static string SerializeToJson(GroupMember groupMember)
+        public static string SerializeToJson<T>(T obj)
         {
-            return JsonUtility.ToJson(groupMember, true);
+            return JsonUtility.ToJson(obj, true);
         }
     }
 }
