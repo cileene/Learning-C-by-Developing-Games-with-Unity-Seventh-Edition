@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace PMAData
 {
-    // this class was refactored to be more generic and reusable
+    // this class originally only took the GroupMember type object
+    // but that hurt my eyes so i spent way too long making it generic
     public static class DataManager
     {
         public static string DataPath;
